@@ -5,7 +5,7 @@ var uniqid = require('uniqid');
 const { sequelize } = require("../models");
 
 
-exports.transaction =  async (req, res) => {
+exports.processTransaction =  async (req, res) => {
     var flag = 0;
     var flag1 = 0;
     var balanceAfterDebit=0,balanceAfterCredit=0;

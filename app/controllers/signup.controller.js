@@ -5,21 +5,21 @@ const bcrypt = require("bcrypt");
 var uniqid = require('uniqid');
 
 
-exports.signup = (req, res) => {
+exports.accountCreation = (req, res) => {
   // Validate request
-  if (!req.body.email) {
+  if (!req.body.email || !req.body.password) {
     return res.status(400).send({
-      message: "Email can not be empty!"
+      message: "Email and password can not be empty!"
     });
   }
   else {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (re.test(String(req.body.email).toLowerCase()))
+  if (re.test(String(req.body.email).toLowerCase()))
   {
-    //return (true)
-  
-    User.findAll({where:{ email: req.body.email }})
+    if(req.body.mobileNumber.length<=10){
+
+      User.findAll({where:{ email: req.body.email }})
     .then(user => {
       if (user.length >= 1) {
         return res.status(409).json({
@@ -36,10 +36,14 @@ exports.signup = (req, res) => {
         const user = {
           email: req.body.email,
           password: hash,
+          name:req.body.name,
+          address:req.body.address,
+          mobileNumber:req.body.mobileNumber
         };
+        var accountNo=uniqid.process();
         User.create(user)
     .then(data => {
-      res.send(data);
+      res.status(200).json({accountNumber:accountNo,messsage:"account created successfully",nextStep:"add money to your account to enjoy services"});
     })
     .catch(err => {
       res.status(500).send({
@@ -47,7 +51,7 @@ exports.signup = (req, res) => {
           err.message || "Some error occurred while creating the Account."
       });
     });
-    Accounts.create({accountNumber:uniqid.process(),balance:0})
+    Accounts.create({accountNumber:accountNo,balance:0})
     .catch(err => {
       res.status(500).send({
         message:
@@ -59,11 +63,20 @@ exports.signup = (req, res) => {
     });
   }
   });
+    }
+    else{
+      return res.status(500).json({
+        message: "invalid MobileNumber"
+      });
+
+    }
+    
 }
 else{
   return res.status(500).json({
     message: "invalid Email"
-  });}} 
+  });
+}} 
 };
 
 

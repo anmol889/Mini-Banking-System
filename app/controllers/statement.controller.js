@@ -1,7 +1,7 @@
 const db = require("../models");
 const Transaction = db.transactions;
 
-exports.statement =   async (req, res) => {
+exports.transactionStatement =   async (req, res) => {
 
     var list = [];
     Transaction.findAll({where:{ to: req.body.accountNumber}})

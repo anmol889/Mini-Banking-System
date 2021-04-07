@@ -3,7 +3,7 @@ const User = db.user;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-exports.login = (req, res) => {
+exports.accountLogin = (req, res) => {
  
     User.findAll({where:{ email: req.body.email }})
       .then(user => {

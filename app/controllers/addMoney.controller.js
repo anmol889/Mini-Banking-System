@@ -2,7 +2,7 @@ const db = require("../models");
 const Accounts = db.accounts;
 
 
-exports.addMoney =  async (req, res) => {
+exports.addMoneyToAccount =  async (req, res) => {
 
     Accounts.findAll({where:{ accountNumber: req.body.accountNumber}})
     .then(data=>{
