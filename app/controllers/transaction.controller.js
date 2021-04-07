@@ -1,9 +1,6 @@
 const db = require("../models");
-const User = db.user;
 const Transaction = db.transactions;
 const Accounts = db.accounts;
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 var uniqid = require('uniqid');
 const { sequelize } = require("../models");
 
