@@ -31,6 +31,9 @@ exports.transaction =  async (req, res) => {
         Accounts.update({balance:data1[0].balance+req.body.amount},
         {where:{ accountNumber: req.body.to }},{transaction:t})
           }
+          else{
+            balanceAfterCredit=data1[0].balance;
+          }
           }});
     
         await Accounts.findAll({where:{ accountNumber: req.body.from }},{transaction:t})
@@ -38,6 +41,7 @@ exports.transaction =  async (req, res) => {
         if(flag!=1){
           if(req.body.amount>data2[0].balance)
           {
+            balanceAfterDebit=data2[0].balance;
             res.status(500).json({message:"transaction Unsuccessfull, you do not have enough balance to make a transaction"});
           }
           else{
@@ -46,13 +50,17 @@ exports.transaction =  async (req, res) => {
         {where:{ accountNumber: req.body.from }},{transaction:t})
   
           }
-          }});
-  
+          }
+        else{
+            balanceAfterDebit=data2[0].balance;
+        }});
+        
         await Transaction.create({from: req.body.from,
           to: req.body.to,
           amount:req.body.amount,
           to_balance:balanceAfterCredit,
           from_balance:balanceAfterDebit,
+          status: (flag==1 || flag1==1)?"failed":"success",
           transactionId:uniqid.process()},{transaction:t})
     
   

@@ -17,6 +17,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       from_balance: {
         type: Sequelize.DOUBLE,
+      },
+      status: {
+        type: Sequelize.STRING,
       }
     });
   
