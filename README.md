@@ -20,11 +20,11 @@
 - Signup     
 {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"email":"anmolpathak8899@gmail.com",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"password":"pass@123",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":"Anmol Pathak",&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"mobileNumber":"9878983457",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"address":"Andheri East, Mumbai"<br>}
 
-- AddMoney  
-{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"amount":10000 <br>}
-
 - Login     
 {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"email":"anmolpathak8899@gmail.com",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"password":"pass@123"<br>}
+
+- AddMoney  
+{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"amount":10000 <br>}
 
 - Transaction    
 {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"accountNumber":"1617910920659",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"amount":10000 <br>}
