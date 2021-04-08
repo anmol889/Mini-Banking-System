@@ -33,14 +33,16 @@ exports.accountCreation = (req, res) => {
           error: err
         });
       } else {
+        var accountNo= Date.now();
         const user = {
           email: req.body.email,
           password: hash,
           name:req.body.name,
           address:req.body.address,
-          mobileNumber:req.body.mobileNumber
+          mobileNumber:req.body.mobileNumber,
+          accountNumber:accountNo
         };
-        var accountNo=uniqid.process();
+        
         User.create(user)
     .then(data => {
       res.status(200).json({accountNumber:accountNo,messsage:"account created successfully",nextStep:"add money to your account to enjoy services"});

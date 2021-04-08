@@ -11,7 +11,7 @@ module.exports = app => {
   router.post("/signup", signup.accountCreation);
   router.post("/login", login.accountLogin);
   router.post("/transaction",checkAuth, transaction.processTransaction);
-  router.post("/statement", checkAuth, statement.transactionStatement);
+  router.get("/statement", checkAuth, statement.transactionStatement);
   router.post("/addMoney", checkAuth, addMoney.addMoneyToAccount);
   app.use("/api", router);
 };

@@ -1,25 +1,39 @@
 const db = require("../models");
+const User = db.user;
 const Transaction = db.transactions;
 const Accounts = db.accounts;
 var uniqid = require('uniqid');
 const { sequelize } = require("../models");
-
+const jwt = require('jsonwebtoken');
 
 exports.processTransaction =  async (req, res) => {
     var flag = 0;
     var flag1 = 0;
+    var depositor;
     var balanceAfterDebit=0,balanceAfterCredit=0;
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, "secret");
+    var userEmail = decoded.email;
+    User.findAll({where:{ email: userEmail }})
+    .then(data=>{
+      depositor=data[0].accountNumber;
+    })
+    .catch(err => {
+      res.status(500).send({
+        error:err
+            });
+    });
     const t = await sequelize.transaction();
     try{
   
-      Accounts.findAll({where:{ accountNumber: req.body.from }},{transaction:t})
+      Accounts.findAll({where:{ accountNumber: depositor }},{transaction:t})
       .then(data3=>{
         if(req.body.amount>data3[0].balance){
            flag1=1;  
         }
       });
   
-      await Accounts.findAll({where:{ accountNumber: req.body.to }},{transaction:t})
+      await Accounts.findAll({where:{ accountNumber: req.body.accountNumber }},{transaction:t})
         .then(data1 =>{
         if(data1.length<1){
           flag=1;
@@ -29,14 +43,14 @@ exports.processTransaction =  async (req, res) => {
           if(flag1!=1){
             balanceAfterCredit=data1[0].balance+req.body.amount;
         Accounts.update({balance:data1[0].balance+req.body.amount},
-        {where:{ accountNumber: req.body.to }},{transaction:t})
+        {where:{ accountNumber: req.body.accountNumber }},{transaction:t})
           }
           else{
             balanceAfterCredit=data1[0].balance;
           }
           }});
     
-        await Accounts.findAll({where:{ accountNumber: req.body.from }},{transaction:t})
+        await Accounts.findAll({where:{ accountNumber: depositor }},{transaction:t})
         .then(data2 =>{ 
         if(flag!=1){
           if(req.body.amount>data2[0].balance)
@@ -47,7 +61,7 @@ exports.processTransaction =  async (req, res) => {
           else{
             balanceAfterDebit=data2[0].balance-req.body.amount;
         Accounts.update({balance:data2[0].balance-req.body.amount},
-        {where:{ accountNumber: req.body.from }},{transaction:t})
+        {where:{ accountNumber: depositor }},{transaction:t})
   
           }
           }
@@ -55,12 +69,14 @@ exports.processTransaction =  async (req, res) => {
             balanceAfterDebit=data2[0].balance;
         }});
         
-        await Transaction.create({from: req.body.from,
-          to: req.body.to,
+        await Transaction.create({
+          from: depositor,
+          to: req.body.accountNumber,
           amount:req.body.amount,
           to_balance:balanceAfterCredit,
           from_balance:balanceAfterDebit,
           status: (flag==1 || flag1==1)?"failed":"success",
+          transactionType:"normal",
           transactionId:uniqid.process()},{transaction:t})
     
   

@@ -14,6 +14,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     mobileNumber: {
       type: Sequelize.STRING,
+    },
+    accountNumber: {
+      type: Sequelize.STRING,
     }
   });
   return User;

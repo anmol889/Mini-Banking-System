@@ -20,6 +20,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       status: {
         type: Sequelize.STRING,
+      },
+      transactionType: {
+        type: Sequelize.STRING,
       }
     });
   
