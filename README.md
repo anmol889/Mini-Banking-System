@@ -1,5 +1,4 @@
 # Mini-Banking-System
-# Mini-Banking-System
 
 ### Setting it up
 1. Install node `version 14.16.0`.
