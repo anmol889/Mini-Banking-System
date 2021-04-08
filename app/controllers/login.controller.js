@@ -22,7 +22,8 @@ exports.accountLogin = (req, res) => {
             const token = jwt.sign(
               {
                 email: user[0].email,
-                userId: user[0].id
+                userId: user[0].id,
+                accountNumber:user[0].accountNumber
               },
               "secret",
               {

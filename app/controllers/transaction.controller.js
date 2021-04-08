@@ -9,28 +9,24 @@ const jwt = require('jsonwebtoken');
 exports.processTransaction =  async (req, res) => {
     var flag = 0;
     var flag1 = 0;
-    var depositor;
     var balanceAfterDebit=0,balanceAfterCredit=0;
     const token = req.headers.authorization;
     const decoded = jwt.verify(token, "secret");
-    var userEmail = decoded.email;
-    User.findAll({where:{ email: userEmail }})
-    .then(data=>{
-      depositor=data[0].accountNumber;
-    })
-    .catch(err => {
-      res.status(500).send({
-        error:err
-            });
-    });
+    var  depositor = decoded.accountNumber;
+    
     const t = await sequelize.transaction();
     try{
-  
-      Accounts.findAll({where:{ accountNumber: depositor }},{transaction:t})
+      await Accounts.findAll({where:{ accountNumber: depositor }},{transaction:t})
       .then(data3=>{
         if(req.body.amount>data3[0].balance){
            flag1=1;  
+           res.status(500).json({message:"transaction Unsuccessfull, you do not have enough balance to make a transaction"});
+
         }
+      }).catch(err => {
+        res.status(500).send({
+          message: err.message 
+        });
       });
   
       await Accounts.findAll({where:{ accountNumber: req.body.accountNumber }},{transaction:t})
